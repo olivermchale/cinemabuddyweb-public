@@ -10,7 +10,7 @@ describe('CinemasComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ 
         CinemasComponent
-       ],
+        ],
       imports: [ 
         HttpClientTestingModule 
       ]

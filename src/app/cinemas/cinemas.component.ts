@@ -34,6 +34,7 @@ export class CinemasComponent implements OnInit {
     this.cinemasService.getCinemasByLocation(lat, long).subscribe(
       cinemas => {
         this.cinemasList = cinemas;
+        this.handleCinemasResponse();
         console.log(this.cinemasList);
       },
       error => {
@@ -44,6 +45,10 @@ export class CinemasComponent implements OnInit {
 
   locationNotSupported() {
     console.log('location isnt supported in this browser');
+  }
+
+  handleCinemasResponse() {
+    
   }
 
 }
