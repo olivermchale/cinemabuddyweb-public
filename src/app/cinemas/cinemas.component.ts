@@ -20,13 +20,12 @@ export class CinemasComponent implements OnInit {
   getUserLocation(): boolean {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude; 
+        const lat = position.coords.latitude;
         const long = position.coords.longitude;
         this.getCinemasByLocation(lat, long);
       });
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -40,7 +39,7 @@ export class CinemasComponent implements OnInit {
       error => {
         console.log(error);
       }
-    )
+    );
   }
 
   locationNotSupported() {
