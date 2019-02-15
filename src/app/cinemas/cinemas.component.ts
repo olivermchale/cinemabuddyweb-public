@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CinemasService } from '../cinemas-services/cinemas.service';
 
 @Component({
   selector: 'app-cinemas',
@@ -7,9 +8,43 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CinemasComponent implements OnInit {
 
-  constructor() { }
-
+  cinemasList: any;
+  constructor(private cinemasService: CinemasService) { }
   ngOnInit() {
+    const locationSupported = this.getUserLocation()
+    if (!locationSupported) {
+      this.locationNotSupported();
+    }
+  }
+
+  getUserLocation(): boolean {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude; 
+        const long = position.coords.longitude;
+        this.getCinemasByLocation(lat, long);
+      });
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  getCinemasByLocation(lat, long) {
+    this.cinemasService.getCinemasByLocation(lat, long).subscribe(
+      cinemas => {
+        this.cinemasList = cinemas;
+        console.log(this.cinemasList);
+      },
+      error => {
+        console.log(error);
+      }
+    )
+  }
+
+  locationNotSupported() {
+    console.log('location isnt supported in this browser');
   }
 
 }
