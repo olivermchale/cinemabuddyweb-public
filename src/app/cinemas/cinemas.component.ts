@@ -11,7 +11,7 @@ export class CinemasComponent implements OnInit {
   cinemasList: any;
   constructor(private cinemasService: CinemasService) { }
   ngOnInit() {
-    const locationSupported = this.getUserLocation()
+    const locationSupported = this.getUserLocation();
     if (!locationSupported) {
       this.locationNotSupported();
     }

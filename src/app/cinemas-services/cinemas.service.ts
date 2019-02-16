@@ -46,7 +46,7 @@ export class CinemasService {
   }
 
   getCinemasByLocation(lat, long): Observable<any> {
-    const url = `${this.baseApiURL}/coordinates/${lat}/${long}`
+    const url = `${this.baseApiURL}/coordinates/${lat}/${long}`;
     return this.http.get(url)
     .pipe(
       retry(1),

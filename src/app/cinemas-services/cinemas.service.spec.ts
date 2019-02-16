@@ -4,8 +4,8 @@ import { CinemasService } from './cinemas.service';
 
 describe('CinemasService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [ 
-      HttpClientTestingModule 
+    imports: [
+      HttpClientTestingModule
     ]
   }));
 
