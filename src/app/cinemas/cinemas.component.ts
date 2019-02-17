@@ -62,6 +62,7 @@ export class CinemasComponent implements OnInit {
     const postcodeRegEx = /[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}/i;
     const valid = postcodeRegEx.test(postcode);
     if(valid) {
+      this.cinemasList = [];
       this.getCinemasByPostcode(postcode);
     }
     else {
