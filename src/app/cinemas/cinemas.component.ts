@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CinemasService } from '../cinemas-services/cinemas.service';
 import { Cinema } from '../utils/Cinema';
+import { Listing } from '../utils/Listing';
+import { MoviesService } from '../movies-services/movies.service';
 
 @Component({
   selector: 'app-cinemas',
@@ -12,8 +14,12 @@ export class CinemasComponent implements OnInit {
   cinemasList = new Array<Cinema>();
   postcode: string;
   validPostcode = true;
+  listings = new Array<Listing>();
+  BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/w185';
 
-  constructor(private cinemasService: CinemasService) { }
+  constructor(
+    private cinemasService: CinemasService,
+    private moviesService: MoviesService) { }
   ngOnInit() {
     const locationSupported = this.getUserLocation();
     if (!locationSupported) {
@@ -121,5 +127,70 @@ export class CinemasComponent implements OnInit {
     }
     return cinemasLoaded;
   }
+
+  getShowings(i) {
+    this.listings = [];
+    const cinema = this.cinemasList[i];
+    this.cinemasService.getShowtimes(cinema.id).subscribe(
+      response => {
+        this.handleShowingsResponse(response);
+        console.log(response);
+      },
+      error => {
+        console.log('error'+ error);
+      }
+    )
+  }
+
+  handleShowingsResponse(response : any) {
+    if(response.listings) {
+      const cinemaListings = response.listings;
+      cinemaListings.forEach(listing => {
+        const myListing = new Listing();
+        myListing.title = listing.title;
+        myListing.times = listing.times;
+        this.listings.push(myListing);
+      });
+      this.getMovieDetails()
+    }
+    else {
+      console.log('no listings');
+    }
+  }
+
+  getMovieDetails() {
+    this.listings.forEach(listing => {
+      this.moviesService.getMovieDetails(listing.title).subscribe(
+        response => {
+          const movieDetails = response.results[0];
+          listing.backdropPath = this.BASE_IMAGE_URL + movieDetails.backdrop_path;
+          listing.posterPath = this.BASE_IMAGE_URL + movieDetails.poster_path;
+          listing.rating = movieDetails.vote_average;
+          listing.releaseDate = movieDetails.release_date;
+          listing.overview = movieDetails.overview;
+          listing.loaded = true;
+          console.log(listing);
+        },
+        error => {
+          console.log('error'+ error);
+        }
+      )
+    });
+  }
+
+  listingsLoaded() {
+    let listingsLoaded = true;
+    if(this.listings.length > 0) {
+      this.listings.forEach(listing => {
+        if(listing.loaded = false) {
+          listingsLoaded = false;
+        }
+      });
+    } else {
+      listingsLoaded = false;
+    }
+    return listingsLoaded;
+  }
+
 
 }

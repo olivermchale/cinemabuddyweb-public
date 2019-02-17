@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<div class="container-full bg-dark">
+<div class="container-full darkest-bg">
     <div class="row">
         <br />
         <br />
@@ -11,7 +11,8 @@
                 <h5 class="card-title">Explore Movie Magic Today!</h5>
                 <p class="card-text">Enter a postcode to find cinemas and showings near you!</p>
                 <div class="active-red-3 active-red-4 mb-4">
-                    <input #postcode class="form-control" type="text" (keyup.enter)="validatePostcode(postcode.value)" placeholder="e.g 'TS1 3BX'" aria-label="Search">
+                    <input #postcode class="form-control" type="text" (keyup.enter)="validatePostcode(postcode.value)"
+                        placeholder="e.g 'TS1 3BX'" aria-label="Search">
                 </div>
                 <div class="error-message">
                     <p [hidden]="validPostcode">Invalid postcode</p>
@@ -22,16 +23,37 @@
         </div>
     </div>
     <div *ngIf="cinemasLoaded()" class="row">
-        <div *ngFor="let cinema of cinemasList" class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
+        <div *ngFor="let cinema of cinemasList; let i = index" class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
             <div class="card text-white bg-danger shadowed spaced">
-                <div class="card-body">
+                <div class="card-body" (click)="getShowings(i)">
                     <h5 class="card-title" *ngIf="cinema.name">{{cinema.name}}</h5>
-                    <p class="card-text" *ngIf="cinema.name">{{cinema.distance}} miles away</p>
-                    <a href="{{cinema.website}}" *ngIf="cinema.name"><p class="card-text link"><u>Website</u><i class="fa fa-external-link left"></i></p></a>
-                    <a href="tel:{{cinema.phone}}"  *ngIf="cinema.name"><p class="card-text link"><u>Phone</u><i class="fa fa-phone left"></i></p></a>
-                    <a href="https://www.google.com/maps/search/?api=1&query={{cinema.name}}"><p class="card-text link"><u>Maps</u><i class="fa fa-map-marker left"></i></p></a>
+                    <p class="card-text" *ngIf="cinema.name">only {{cinema.distance}} miles away</p>
+                    <a href="{{cinema.website}}" *ngIf="cinema.name">
+                        <p class="card-text link"><u>Website</u><i class="fa fa-external-link left"></i></p>
+                    </a>
+                    <a href="tel:{{cinema.phone}}" *ngIf="cinema.name">
+                        <p class="card-text link"><u>Phone</u><i class="fa fa-phone left"></i></p>
+                    </a>
+                    <a href="https://www.google.com/maps/search/?api=1&query={{cinema.name}}">
+                        <p class="card-text link"><u>Maps</u><i class="fa fa-map-marker left"></i></p>
+                    </a>
                 </div>
             </div>
+        </div>
+    </div>
+    <div *ngIf="listingsLoaded()" class="row">
+
+
+        <div *ngFor="let listing of listings; let i = index" class="col-md-3 col-lg-2">
+            <div class="card text-white darker-bg shadowed justify-content-center text-center">
+                <div class="card-body">
+                    <br />
+                    <img class="image-card shadowed" src="{{listing.posterPath}}">
+                    <h6>{{listing.title}}</h6>
+                    <p>{{listing.rating}}/10</p>
+                </div>
+            </div>
+            <br />
         </div>
     </div>
 </div>
