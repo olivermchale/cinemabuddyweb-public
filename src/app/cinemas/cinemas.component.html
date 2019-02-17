@@ -11,9 +11,26 @@
                 <h5 class="card-title">Explore Movie Magic Today!</h5>
                 <p class="card-text">Enter a postcode to find cinemas and showings near you!</p>
                 <div class="active-red-3 active-red-4 mb-4">
-                    <input class="form-control" type="text" placeholder="e.g 'TS1 3BX'" aria-label="Search">
+                    <input #postcode class="form-control" type="text" placeholder="e.g 'TS1 3BX'" aria-label="Search">
                 </div>
-                <button type="button" class="btn btn-danger active">Search</button>
+                <div class="error-message">
+                    <p [hidden]="validPostcode">Invalid postcode</p>
+                </div>
+                <button type="button" (click)="validatePostcode(postcode.value)"
+                    class="btn btn-danger active">Search</button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="cinemasLoaded()" class="row">
+        <div *ngFor="let cinema of cinemasList" class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
+            <div class="card text-white bg-danger shadowed spaced">
+                <div class="card-body">
+                    <h5 class="card-title">{{cinema.name}}</h5>
+                    <p class="card-text">{{cinema.distance}}</p>
+                    <p class="card-text">{{cinema.town}}</p>
+                    <p class="card-text">{{cinema.website}}</p>
+                    <p class="card-text">{{cinema.phone}}</p>
+                </div>
             </div>
         </div>
     </div>

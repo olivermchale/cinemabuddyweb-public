@@ -10,7 +10,8 @@ export class CinemasService {
 
   constructor(private http: HttpClient) { }
 
-  baseApiURL = 'https://api.cinelist.co.uk/search/cinemas';
+  baseSearchApiURL = 'https://api.cinelist.co.uk/search/cinemas';
+  baseDetailsApiUrl = 'https://api.cinelist.co.uk/get';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -28,7 +29,7 @@ export class CinemasService {
   }
 
   getCinemasByPostcode(postcode: string): Observable<any> {
-    const url = `${this.baseApiURL}/postcode/${postcode}`;  
+    const url = `${this.baseSearchApiURL}/postcode/${postcode}`;  
     return this.http.get(url)
     .pipe(
       retry(1),
@@ -37,7 +38,7 @@ export class CinemasService {
   }
 
   getCinemasByPlace(place: string): Observable<any> {
-    const url = `${this.baseApiURL}/${place}`;
+    const url = `${this.baseSearchApiURL}/${place}`;
     return this.http.get(url)
     .pipe(
       retry(1),
@@ -46,7 +47,16 @@ export class CinemasService {
   }
 
   getCinemasByLocation(lat, long): Observable<any> {
-    const url = `${this.baseApiURL}/coordinates/${lat}/${long}`;
+    const url = `${this.baseSearchApiURL}/coordinates/${lat}/${long}`;
+    return this.http.get(url)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  getCinemaDetails(id): Observable<any> {
+    const url = `${this.baseDetailsApiUrl}/cinema/${id}`;
     return this.http.get(url)
     .pipe(
       retry(1),
