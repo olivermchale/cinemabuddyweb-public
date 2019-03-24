@@ -14,8 +14,12 @@ export class CinemasComponent implements OnInit {
   cinemasList = new Array<Cinema>();
   postcode: string;
   validPostcode = true;
+  showFocusedCinema = false;
+  focusedCinema: any;
   listings = new Array<Listing>();
+  cinemasLoading = false;
   BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/w185';
+  DEFAULT_IMAGE = './assets/images/unknown_image.png';
 
   constructor(
     private cinemasService: CinemasService,
@@ -65,6 +69,7 @@ export class CinemasComponent implements OnInit {
   }
 
   validatePostcode(postcode) {
+    this.cinemasLoading = true;
     const postcodeRegEx = /[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}/i;
     const valid = postcodeRegEx.test(postcode);
     if(valid) {
@@ -81,6 +86,7 @@ export class CinemasComponent implements OnInit {
   }
 
   handleCinemasResponse(response) {
+    this.cinemasLoading = false;
     const cinemas = response.cinemas;
     cinemas.forEach(cinema => {
       const myCinema = new Cinema();
@@ -128,9 +134,21 @@ export class CinemasComponent implements OnInit {
     return cinemasLoaded;
   }
 
+  setFocusedCinema(cinema: Cinema) {
+    this.showFocusedCinema = true;
+    this.focusedCinema = cinema;
+  }
+
+  scrollToShowings() {
+    var element = document.getElementById("listingsPlaceholder");
+    element.scrollIntoView(true);
+  }
+
   getShowings(i) {
     this.listings = [];
     const cinema = this.cinemasList[i];
+    this.setFocusedCinema(cinema);
+    this.scrollToShowings();
     this.cinemasService.getShowtimes(cinema.id).subscribe(
       response => {
         this.handleShowingsResponse(response);
@@ -163,13 +181,15 @@ export class CinemasComponent implements OnInit {
       this.moviesService.getMovieDetails(listing.title).subscribe(
         response => {
           const movieDetails = response.results[0];
-          listing.backdropPath = this.BASE_IMAGE_URL + movieDetails.backdrop_path;
-          listing.posterPath = this.BASE_IMAGE_URL + movieDetails.poster_path;
-          listing.rating = movieDetails.vote_average;
-          listing.releaseDate = movieDetails.release_date;
-          listing.overview = movieDetails.overview;
-          listing.loaded = true;
-          console.log(listing);
+          if(movieDetails) {
+            listing.backdropPath = (movieDetails.backdrop_path != null) ? this.BASE_IMAGE_URL + movieDetails.backdrop_path : "none"
+            listing.posterPath = this.BASE_IMAGE_URL + movieDetails.poster_path;
+            listing.rating = movieDetails.vote_average;
+            listing.releaseDate = movieDetails.release_date;
+            listing.overview = movieDetails.overview;
+            listing.loaded = true;
+            console.log(listing);
+          }
         },
         error => {
           console.log('error'+ error);
@@ -191,6 +211,16 @@ export class CinemasComponent implements OnInit {
     }
     return listingsLoaded;
   }
+
+  getPoster(i) {
+    const listing = this.listings[i];
+    if(listing.posterPath) {
+      return listing.posterPath;
+    } else {
+      return this.DEFAULT_IMAGE;
+    }
+  }
+
 
 
 }

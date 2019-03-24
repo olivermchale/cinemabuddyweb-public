@@ -54,4 +54,16 @@
     margin: 5px;
     margin-bottom: 5px;
     margin-top:5px;
+    width: 70%;
+    height: 70%;
+}
+
+.full {
+    width: 100%;
+}
+
+.listing-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
