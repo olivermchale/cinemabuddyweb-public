@@ -48,7 +48,6 @@ export class CinemasComponent implements OnInit {
     this.cinemasService.getCinemasByLocation(lat, long).subscribe(
       response => {
         this.handleCinemasResponse(response);
-        console.log(response);
       },
       error => {
         console.log(error);
@@ -60,7 +59,6 @@ export class CinemasComponent implements OnInit {
     this.cinemasService.getCinemasByPostcode(postcode).subscribe(
       response => {
         this.handleCinemasResponse(response);
-        console.log(response);
       },
       error => {
         console.log(error);
@@ -95,7 +93,6 @@ export class CinemasComponent implements OnInit {
       myCinema.id = cinema.id;
       this.cinemasList.push(myCinema);
     });
-    console.log(this.cinemasList);
     if(this.cinemasList) {
       this.getCinemaDetails();
     }
@@ -110,7 +107,6 @@ export class CinemasComponent implements OnInit {
           cinema.website = response.website;
           cinema.phone = response.phone;
           cinema.loaded = true;
-          console.log(cinema);
         },
         error => {
           console.log('error');
@@ -139,20 +135,14 @@ export class CinemasComponent implements OnInit {
     this.focusedCinema = cinema;
   }
 
-  scrollToShowings() {
-    var element = document.getElementById("listingsPlaceholder");
-    element.scrollIntoView(true);
-  }
 
   getShowings(i) {
     this.listings = [];
     const cinema = this.cinemasList[i];
     this.setFocusedCinema(cinema);
-    this.scrollToShowings();
     this.cinemasService.getShowtimes(cinema.id).subscribe(
       response => {
         this.handleShowingsResponse(response);
-        console.log(response);
       },
       error => {
         console.log('error'+ error);
@@ -188,7 +178,6 @@ export class CinemasComponent implements OnInit {
             listing.releaseDate = movieDetails.release_date;
             listing.overview = movieDetails.overview;
             listing.loaded = true;
-            console.log(listing);
           }
         },
         error => {

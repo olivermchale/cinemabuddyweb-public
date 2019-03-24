@@ -24,27 +24,28 @@
     </div>
     <div *ngIf="cinemasLoaded()" class="row">
         <div *ngFor="let cinema of cinemasList; let i = index" class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
-            <div class="card text-white bg-danger shadowed spaced">
+            <div class="card text-white bg-danger shadowed spaced clickable"  [ngx-scroll-to]="'cinemaPlaceholder'">
                 <div class="card-body" (click)="getShowings(i)">
                     <h5 class="card-title" *ngIf="cinema.name">{{cinema.name}}</h5>
                     <p class="card-text" *ngIf="cinema.name">only {{cinema.distance}} miles away</p>
-                    <a href="{{cinema.website}}" *ngIf="cinema.name">
-                        <p class="card-text link"><u>Website</u><i class="fa fa-external-link left"></i></p>
+                    <a href="{{cinema.website}}" target="_blank" *ngIf="cinema.name" class="card-text link">
+                        <u>Website</u><i class="fa fa-external-link left"></i><br/>
                     </a>
-                    <a href="tel:{{cinema.phone}}" *ngIf="cinema.name">
-                        <p class="card-text link"><u>Phone</u><i class="fa fa-phone left"></i></p>
+                    <a href="tel:{{cinema.phone}}" target="_blank" *ngIf="cinema.name" class="card-text link">
+                        <u>Phone</u><i class="fa fa-phone left"></i><br/>
                     </a>
-                    <a href="https://www.google.com/maps/search/?api=1&query={{cinema.name}}">
-                        <p class="card-text link"><u>Maps</u><i class="fa fa-map-marker left"></i></p>
+                    <a href="https://www.google.com/maps/search/?api=1&query={{cinema.name}}" target="_blank" class="card-text link">
+                        <u>Maps</u><i class="fa fa-map-marker left"></i><br/>
                     </a>
                 </div>
             </div>
         </div>
     </div>
+    <span id="cinemaPlaceholder"></span>
     <div *ngIf="showFocusedCinema">
         <div class="row justify-content-center text-center midcard">
             <div class="card text-white bg-danger shadowed spaced ">
-                <div class="card-body">
+                <div class="card-body" id="focusedCinema">
                     <h5 class="card-title">Displaying showings for:</h5>
                     <h5 class="card-title">{{focusedCinema.name}}</h5>
                 </div>
@@ -64,5 +65,4 @@
             <br />
         </div>
     </div>
-    <div class="invisible" id="listingsPlaceholder"></div>
 </div>
