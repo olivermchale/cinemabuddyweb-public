@@ -16,6 +16,7 @@ export class CinemasComponent implements OnInit {
   validPostcode = true;
   showFocusedCinema = false;
   focusedCinema: any;
+  searchText: string = 'Search';
   listings = new Array<Listing>();
   cinemasLoading = false;
   BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/w185';
@@ -55,6 +56,12 @@ export class CinemasComponent implements OnInit {
     );
   }
 
+  handleLoadCinemesError(error) {
+    console.log(error);
+    this.cinemasLoading = false;
+    this.searchText = 'Search'
+  }
+
   getCinemasByPostcode(postcode) {
     this.cinemasService.getCinemasByPostcode(postcode).subscribe(
       response => {
@@ -67,11 +74,14 @@ export class CinemasComponent implements OnInit {
   }
 
   validatePostcode(postcode) {
-    this.cinemasLoading = true;
+    
     const postcodeRegEx = /[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}/i;
     const valid = postcodeRegEx.test(postcode);
     if(valid) {
       this.cinemasList = [];
+      this.searchText = 'Searching...'
+      this.cinemasLoading = true;
+      this.validPostcode = true;
       this.getCinemasByPostcode(postcode);
     }
     else {
@@ -85,6 +95,7 @@ export class CinemasComponent implements OnInit {
 
   handleCinemasResponse(response) {
     this.cinemasLoading = false;
+    this.searchText = 'Search'
     const cinemas = response.cinemas;
     cinemas.forEach(cinema => {
       const myCinema = new Cinema();

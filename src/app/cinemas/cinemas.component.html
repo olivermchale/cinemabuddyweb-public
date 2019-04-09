@@ -18,7 +18,7 @@
                     <p [hidden]="validPostcode">Invalid postcode</p>
                 </div>
                 <button type="button" (click)="validatePostcode(postcode.value)"
-                    class="btn btn-danger active">Search <i *ngIf="cinemasLoading" class="fa fa-spinner fa-spin"></i> </button>
+                    class="btn btn-danger active">{{searchText}} <i *ngIf="cinemasLoading" class="fa fa-spinner fa-spin"></i> </button>
             </div>
         </div>
     </div>
